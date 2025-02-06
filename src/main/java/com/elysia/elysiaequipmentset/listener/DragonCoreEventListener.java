@@ -4,15 +4,16 @@ import com.elysia.elysiaequipmentset.ElysiaEquipmentSet;
 import com.elysia.elysiaequipmentset.filemanager.data.EquipmentData;
 import eos.moe.dragoncore.api.SlotAPI;
 import eos.moe.dragoncore.api.event.PlayerSlotUpdateEvent;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.serverct.ersha.api.AttributeAPI;
+import org.serverct.ersha.attribute.data.AttributeData;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,17 +68,26 @@ public class DragonCoreEventListener implements Listener {
     }
     private void enableEquipment(UUID uuid, String id, int level){
         EquipmentData.EffectData effectData = ElysiaEquipmentSet.getEquipmentManager().getEquipmentData(id).getEffects().get(level);
+        Player player = Bukkit.getPlayer(uuid);
+        AttributeData attributeData = AttributeAPI.getAttrData(player);
         for (String command : effectData.getEnable_command())
             dispatchCommand(uuid, command);
         for (String tips : effectData.getEnable_tips())
             sendTips(uuid, tips);
+        List<String> attributes = new ArrayList<>();
+        for (String attribute : effectData.getEnable_attribute())
+            attributes.add(parseString(attribute, player));
+        AttributeAPI.addPersistentSourceAttribute(attributeData, "ElysiaEquipmentSet" + id + level, attributes, System.currentTimeMillis() ,true);
     }
     private void disableEquipment(UUID uuid, String id, int level){
         EquipmentData.EffectData effectData = ElysiaEquipmentSet.getEquipmentManager().getEquipmentData(id).getEffects().get(level);
+        Player player = Bukkit.getPlayer(uuid);
+        AttributeData attributeData = AttributeAPI.getAttrData(player);
         for (String command : effectData.getDisable_command())
             dispatchCommand(uuid, command);
         for (String tips : effectData.getDisable_tips())
             sendTips(uuid, tips);
+        AttributeAPI.takePersistentSourceAttribute(attributeData, "ElysiaEquipmentSet" + id + level);
     }
     private void dispatchCommand(UUID uuid, String command){
         Player player = Bukkit.getPlayer(uuid);
@@ -96,5 +106,15 @@ public class DragonCoreEventListener implements Listener {
         player.sendMessage(
                 ElysiaEquipmentSet.getConfigManager().getConfigData().getPrefix() + tips
         );
+    }
+    private String parseString(String string, Player player){
+        if (string.contains("%")){
+            String regex = "%(.*?)%";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(string);
+            if (matcher.find())
+                return parseString(string.replaceAll(matcher.group(), PlaceholderAPI.setPlaceholders(player, matcher.group())), player);
+        }
+        return string;
     }
 }
