@@ -1,5 +1,9 @@
 package com.elysia.elysiaequipmentset;
 
+import com.elysia.elysiaequipmentset.command.CommandManager;
+import com.elysia.elysiaequipmentset.command.CommandTabComplete;
+import com.elysia.elysiaequipmentset.command.subcommands.HelpCommand;
+import com.elysia.elysiaequipmentset.command.subcommands.ReloadCommand;
 import com.elysia.elysiaequipmentset.filemanager.ConfigManager;
 import com.elysia.elysiaequipmentset.filemanager.EquipmentManager;
 import com.elysia.elysiaequipmentset.filemanager.PlayerDataManager;
@@ -40,7 +44,11 @@ public final class ElysiaEquipmentSet extends JavaPlugin {
         createFile();
         configManager.loadConfig();
         equipmentManager.load();
+        new HelpCommand().register();
+        new ReloadCommand().register();
         Bukkit.getPluginManager().registerEvents(new DragonCoreEventListener(), this);
+        Bukkit.getPluginCommand("ElysiaEquipmentSet").setExecutor(new CommandManager());
+        Bukkit.getPluginCommand("ElysiaEquipmentSet").setTabCompleter(new CommandTabComplete());
     }
 
     @Override
