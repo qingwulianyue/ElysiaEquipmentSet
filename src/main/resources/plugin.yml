@@ -1,0 +1,4 @@
+name: ElysiaEquipmentSet
+version: '${project.version}'
+main: com.elysia.elysiaequipmentset.ElysiaEquipmentSet
+load: STARTUP

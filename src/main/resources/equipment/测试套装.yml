@@ -1,0 +1,41 @@
+测试套装:
+  name:
+    - 测试套装头盔
+    - 测试套装胸甲
+  lore:
+    - "§a测试套装头盔"
+    - "§a测试套装"
+  new_color: "§c"
+  effect:
+    1:
+      enable:
+        command:
+          - "[console]mm i give %player_name% 测试物品"
+          - "say 1"
+        attribute:
+          - "物理伤害: %player_health%"
+          - "物理防御: 10"
+        tips:
+          - "§a激活了测试套装1件套"
+      disable:
+        command:
+          - "[console]mm i take %player_name% 测试物品"
+          - "say 2"
+        tips:
+          - "§c测试套装1件套消失了"
+    2:
+      enable:
+        command:
+          - "[console]mm i give %player_name% 测试物品"
+          - "say 1"
+        attribute:
+          - "物理伤害: %player_health%"
+          - "物理防御: 10"
+        tips:
+          - "§a激活了测试套装2件套"
+      disable:
+        command:
+          - "[console]mm i give %player_name% 测试物品"
+          - "say 2"
+        tips:
+          - "§c测试套装2件套效果消失了"

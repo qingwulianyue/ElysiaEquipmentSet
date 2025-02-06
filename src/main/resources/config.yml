@@ -1,0 +1,5 @@
+debug: true
+prefix: "§6[套装系统]"
+slot:
+  - 0
+  - 1
