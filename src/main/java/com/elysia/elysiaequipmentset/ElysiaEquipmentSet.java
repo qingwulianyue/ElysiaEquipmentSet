@@ -10,6 +10,7 @@ import com.elysia.elysiaequipmentset.filemanager.PlayerDataManager;
 import com.elysia.elysiaequipmentset.listener.DragonCoreEventListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,16 +45,19 @@ public final class ElysiaEquipmentSet extends JavaPlugin {
         createFile();
         configManager.loadConfig();
         equipmentManager.load();
+        playerDataManager.load();
         new HelpCommand().register();
         new ReloadCommand().register();
         Bukkit.getPluginManager().registerEvents(new DragonCoreEventListener(), this);
         Bukkit.getPluginCommand("ElysiaEquipmentSet").setExecutor(new CommandManager());
         Bukkit.getPluginCommand("ElysiaEquipmentSet").setTabCompleter(new CommandTabComplete());
+        startAutomaticSavePlayerDataTask();
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        playerDataManager.savePlayerData();
     }
     private void createFile() {
         saveDefaultConfig();
@@ -61,7 +65,9 @@ public final class ElysiaEquipmentSet extends JavaPlugin {
     }
     private void createDefaultFile(){
         saveDefaultConfig();
-        Path folderPath = getDataFolder().toPath().resolve("equipment");
+        Path folderPath = getDataFolder().toPath().resolve("PlayerData");
+        createDirectoryIfNotExists(folderPath);
+        folderPath = getDataFolder().toPath().resolve("equipment");
         createDirectoryIfNotExists(folderPath);
         Path filePath = folderPath.resolve("测试套装.yml");
         if (!Files.exists(filePath)) {
@@ -87,5 +93,16 @@ public final class ElysiaEquipmentSet extends JavaPlugin {
             throw new RuntimeException("Resource '/equipment/测试套装.yml' not found in classpath.");
         }
         return resourceStream;
+    }
+    private void startAutomaticSavePlayerDataTask() {
+        long ticks = configManager.getConfigData().getSave_timer() * 20L;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (configManager.getConfigData().isSave_tips())
+                    getLogger().info("§e开始保存玩家数据");
+                playerDataManager.savePlayerData();
+            }
+        }.runTaskTimer(this, 0L, ticks);
     }
 }

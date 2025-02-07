@@ -5,3 +5,5 @@ load: STARTUP
 commands:
   ElysiaEquipmentSet:
     permission: admin
+    aliases:
+      - ees

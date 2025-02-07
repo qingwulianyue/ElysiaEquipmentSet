@@ -41,6 +41,8 @@ public class DragonCoreEventListener implements Listener {
     private void compareToPlayerSaveData(UUID uuid, HashMap<String, Integer> equipmentData){
         //获取玩家已有的套装数据
         HashMap<String, Integer> playerData = ElysiaEquipmentSet.getPlayerDataManager().getPlayerEquipmentData(uuid);
+        System.out.println(playerData);
+        System.out.println(equipmentData);
         //当玩家原本没有套装数据时，则生效当前的所有套装
         if (playerData == null || playerData.isEmpty()){
             for (String id : equipmentData.keySet())
@@ -54,7 +56,7 @@ public class DragonCoreEventListener implements Listener {
             for (String id : playerData.keySet()) {
                 if (!equipmentData.containsKey(id))
                     disableEquipment(uuid, id, playerData.get(id));
-                else {
+                else if (!Objects.equals(equipmentData.get(id), playerData.get(id))){
                     disableEquipment(uuid, id, playerData.get(id));
                     enableEquipment(uuid, id, equipmentData.get(id));
                 }
@@ -64,30 +66,41 @@ public class DragonCoreEventListener implements Listener {
                     enableEquipment(uuid, id, equipmentData.get(id));
             }
         }
-        ElysiaEquipmentSet.getPlayerDataManager().loadPlayerData(uuid, equipmentData);
+        ElysiaEquipmentSet.getPlayerDataManager().putPlayerData(uuid, equipmentData);
     }
     private void enableEquipment(UUID uuid, String id, int level){
         EquipmentData.EffectData effectData = ElysiaEquipmentSet.getEquipmentManager().getEquipmentData(id).getEffects().get(level);
         Player player = Bukkit.getPlayer(uuid);
         AttributeData attributeData = AttributeAPI.getAttrData(player);
-        for (String command : effectData.getEnable_command())
-            dispatchCommand(uuid, command);
-        for (String tips : effectData.getEnable_tips())
-            sendTips(uuid, tips);
-        List<String> attributes = new ArrayList<>();
-        for (String attribute : effectData.getEnable_attribute())
-            attributes.add(parseString(attribute, player));
-        AttributeAPI.addPersistentSourceAttribute(attributeData, "ElysiaEquipmentSet" + id + level, attributes, System.currentTimeMillis() ,true);
+        if (effectData.getEnable_command() != null){
+            for (String command : effectData.getEnable_command())
+                dispatchCommand(uuid, command);
+        }
+        if (effectData.getEnable_tips() != null){
+            for (String tips : effectData.getEnable_tips())
+                sendTips(uuid, tips);
+        }
+        if (effectData.getEnable_attribute() != null){
+            List<String> attributes = new ArrayList<>();
+            for (String attribute : effectData.getEnable_attribute())
+                attributes.add(parseString(attribute, player));
+            AttributeAPI.addPersistentSourceAttribute(attributeData, "ElysiaEquipmentSet" + id + level, attributes, System.currentTimeMillis() ,true);
+        }
     }
     private void disableEquipment(UUID uuid, String id, int level){
         EquipmentData.EffectData effectData = ElysiaEquipmentSet.getEquipmentManager().getEquipmentData(id).getEffects().get(level);
         Player player = Bukkit.getPlayer(uuid);
         AttributeData attributeData = AttributeAPI.getAttrData(player);
-        for (String command : effectData.getDisable_command())
-            dispatchCommand(uuid, command);
-        for (String tips : effectData.getDisable_tips())
-            sendTips(uuid, tips);
-        AttributeAPI.takePersistentSourceAttribute(attributeData, "ElysiaEquipmentSet" + id + level);
+        if (effectData.getDisable_command() != null){
+            for (String command : effectData.getDisable_command())
+                dispatchCommand(uuid, command);
+        }
+        if (effectData.getDisable_tips() != null){
+            for (String tips : effectData.getDisable_tips())
+                sendTips(uuid, tips);
+        }
+        if (effectData.getEnable_attribute() != null)
+            AttributeAPI.takePersistentSourceAttribute(attributeData, "ElysiaEquipmentSet" + id + level);
     }
     private void dispatchCommand(UUID uuid, String command){
         Player player = Bukkit.getPlayer(uuid);

@@ -1,5 +1,7 @@
 debug: true
 prefix: "§6[套装系统]"
+save_timer: 300
+save_tips: true
 slot:
-  - 0
-  - 1
+  - 头部槽位
+  - 胸部槽位

@@ -24,6 +24,8 @@ public class ConfigManager {
         configData = new ConfigData(
                 config.getBoolean("debug"),
                 config.getString("prefix"),
+                config.getInt("save_timer"),
+                config.getBoolean("save_tips"),
                 config.getStringList("slot")
         );
         logConfigInfoIfDebug();
@@ -32,6 +34,8 @@ public class ConfigManager {
         if (configData.isDebug()){
             plugin.getLogger().info("§eDebug: §a" + configData.isDebug());
             plugin.getLogger().info("§ePrefix: §a" + configData.getPrefix());
+            plugin.getLogger().info("§eSave Timer: §a" + configData.getSave_timer());
+            plugin.getLogger().info("§eSave Tips: §a" + configData.isSave_tips());
             plugin.getLogger().info("§eSlot: §a" + configData.getSlot());
         }
     }

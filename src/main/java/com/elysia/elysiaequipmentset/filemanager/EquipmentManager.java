@@ -28,12 +28,8 @@ public class EquipmentManager {
     public EquipmentData getEquipmentData(String id){
         return equipmentDataHashMap.get(id);
     }
-    public boolean checkItemDisplayNameInEquipmentData(String displayName, String id){
-        EquipmentData equipmentData = equipmentDataHashMap.get(id);
-        List<String> name = equipmentData.getName();
-        return name.contains(displayName);
-    }
     public void load(){
+        equipmentDataHashMap.clear();
         findAllYmlFiles(new File(plugin.getDataFolder() + "/equipment"));
     }
     private void findAllYmlFiles(File folder) {

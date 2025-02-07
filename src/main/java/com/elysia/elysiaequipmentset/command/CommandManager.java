@@ -12,6 +12,7 @@ public class CommandManager implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (strings.length == 0){
             SubCommandManager.get(HelpCommand.class).execute(commandSender, strings);
+            return true;
         }
         String subCommand = strings[0];
         ISubCommand iSubCommand = SubCommandManager.get(subCommand);
