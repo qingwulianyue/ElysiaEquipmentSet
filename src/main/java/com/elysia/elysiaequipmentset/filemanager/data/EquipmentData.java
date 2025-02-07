@@ -6,15 +6,11 @@ import java.util.List;
 public class EquipmentData {
     private final String id;
     private final List<String> name;
-    private final List<String> lore;
-    private final String new_color;
     private final HashMap<Integer, EffectData> effects;
 
-    public EquipmentData(String id, List<String> name, List<String> lore, String newColor, HashMap<Integer, EffectData> effects) {
+    public EquipmentData(String id, List<String> name, HashMap<Integer, EffectData> effects) {
         this.id = id;
         this.name = name;
-        this.lore = lore;
-        new_color = newColor;
         this.effects = effects;
     }
 
@@ -60,14 +56,6 @@ public class EquipmentData {
 
     public List<String> getName() {
         return name;
-    }
-
-    public List<String> getLore() {
-        return lore;
-    }
-
-    public String getNew_color() {
-        return new_color;
     }
 
     public HashMap<Integer, EffectData> getEffects() {

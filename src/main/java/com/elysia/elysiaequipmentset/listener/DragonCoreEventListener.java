@@ -41,8 +41,6 @@ public class DragonCoreEventListener implements Listener {
     private void compareToPlayerSaveData(UUID uuid, HashMap<String, Integer> equipmentData){
         //获取玩家已有的套装数据
         HashMap<String, Integer> playerData = ElysiaEquipmentSet.getPlayerDataManager().getPlayerEquipmentData(uuid);
-        System.out.println(playerData);
-        System.out.println(equipmentData);
         //当玩家原本没有套装数据时，则生效当前的所有套装
         if (playerData == null || playerData.isEmpty()){
             for (String id : equipmentData.keySet())

@@ -51,8 +51,6 @@ public class EquipmentManager {
     private void loadEquipmentData(YamlConfiguration config){
         for (String id : config.getKeys(false)){
             List<String> name = config.getStringList(id + ".name");
-            List<String> lore = config.getStringList(id + ".lore");
-            String new_color = config.getString(id + ".new_color");
             HashMap<Integer, EquipmentData.EffectData> effects = new HashMap<>();
             for (String i : config.getConfigurationSection(id + ".effect").getKeys(false)){
                 List<String> enableCommand = config.getStringList(id + ".effect." + i + ".enable.command");
@@ -62,7 +60,7 @@ public class EquipmentManager {
                 List<String> disableTips = config.getStringList(id + ".effect." + i + ".disable.tips");
                 effects.put(Integer.parseInt(i), new EquipmentData.EffectData(enableCommand, enableAttribute, enableTips, disableCommand, disableTips));
             }
-            EquipmentData equipmentData = new EquipmentData(id, name, lore, new_color, effects);
+            EquipmentData equipmentData = new EquipmentData(id, name, effects);
             logEquipmentDataIfDebug(equipmentData);
             equipmentDataHashMap.put(id, equipmentData);
         }
@@ -71,8 +69,6 @@ public class EquipmentManager {
         if (ElysiaEquipmentSet.getConfigManager().getConfigData().isDebug()){
             plugin.getLogger().info("§eID: §a" + equipmentData.getId());
             plugin.getLogger().info("§eName: §a" + equipmentData.getName());
-            plugin.getLogger().info("§eLore: §a" + equipmentData.getLore());
-            plugin.getLogger().info("§eNew Color: §a" + equipmentData.getNew_color());
             for (Integer i : equipmentData.getEffects().keySet()){
                 EquipmentData.EffectData effectData = equipmentData.getEffects().get(i);
                 plugin.getLogger().info("§eEffect: §a" + i);
