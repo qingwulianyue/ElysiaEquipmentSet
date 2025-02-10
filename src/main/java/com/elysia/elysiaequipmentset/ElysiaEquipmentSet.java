@@ -6,6 +6,7 @@ import com.elysia.elysiaequipmentset.command.subcommands.HelpCommand;
 import com.elysia.elysiaequipmentset.command.subcommands.ReloadCommand;
 import com.elysia.elysiaequipmentset.filemanager.ConfigManager;
 import com.elysia.elysiaequipmentset.filemanager.EquipmentManager;
+import com.elysia.elysiaequipmentset.filemanager.FileListener;
 import com.elysia.elysiaequipmentset.filemanager.PlayerDataManager;
 import com.elysia.elysiaequipmentset.listener.DragonCoreEventListener;
 import org.bukkit.Bukkit;
@@ -17,7 +18,9 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
+/**
+ * @author Elysia
+ */
 public final class ElysiaEquipmentSet extends JavaPlugin {
     private static ElysiaEquipmentSet instance;
     private static ConfigManager configManager;
@@ -51,6 +54,7 @@ public final class ElysiaEquipmentSet extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new DragonCoreEventListener(), this);
         Bukkit.getPluginCommand("ElysiaEquipmentSet").setExecutor(new CommandManager());
         Bukkit.getPluginCommand("ElysiaEquipmentSet").setTabCompleter(new CommandTabComplete());
+        FileListener.startWatching(getDataFolder());
         startAutomaticSavePlayerDataTask();
     }
 

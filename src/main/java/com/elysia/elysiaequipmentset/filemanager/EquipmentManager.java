@@ -8,6 +8,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * 套装数据管理器
+ */
 public class EquipmentManager {
     private EquipmentManager(){}
     private static final EquipmentManager instance = new EquipmentManager();
@@ -16,6 +19,11 @@ public class EquipmentManager {
     public static EquipmentManager getInstance() {
         return instance;
     }
+    /**
+     * 根据装备名称查找套装id
+     * @param displayName 装备名称
+     * @return 套装id
+     */
     public String findEquipmentDataByDisplayName(String displayName){
         for (String key : equipmentDataHashMap.keySet()) {
             EquipmentData equipmentData = equipmentDataHashMap.get(key);
