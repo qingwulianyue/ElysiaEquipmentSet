@@ -16,10 +16,8 @@ public class ReloadCommand implements ISubCommand{
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (args.length == 1){
-            ElysiaEquipmentSet.getEquipmentManager().load();
-            ElysiaEquipmentSet.getConfigManager().loadConfig();
-            sender.sendMessage("重载成功");
-        }
+        ElysiaEquipmentSet.getEquipmentManager().load();
+        ElysiaEquipmentSet.getConfigManager().loadConfig();
+        sender.sendMessage("重载成功");
     }
 }
