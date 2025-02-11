@@ -107,6 +107,6 @@ public final class ElysiaEquipmentSet extends JavaPlugin {
                     getLogger().info("§e开始保存玩家数据");
                 playerDataManager.savePlayerData();
             }
-        }.runTaskTimer(this, 0L, ticks);
+        }.runTaskTimerAsynchronously(this, 0L, ticks);
     }
 }
